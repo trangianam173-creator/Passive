@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Câu Bị Động (Passive Voice) - Lớp 9</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .correct {
+            background-color: #22c55e !important; /* green-500 */
+            color: white !important;
+            border-color: #16a34a !important; /* green-600 */
+        }
+        .incorrect {
+            background-color: #ef4444 !important; /* red-500 */
+            color: white !important;
+            border-color: #dc2626 !important; /* red-600 */
+        }
+        .explanation {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .explanation.show {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 flex items-center justify-center min-h-screen p-4">
+
+    <div id="quiz-container" class="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-slate-700 mb-2">Bài tập Trắc nghiệm: Câu Bị Động (Passive Voice)</h1>
+        <p class="text-center text-slate-500 mb-6">Dành cho học sinh lớp 9 - Chương trình 2018</p>
+        
+        <div id="quiz-content">
+            <div class="flex justify-between items-center mb-4 text-sm font-medium">
+                <div id="progress" class="text-indigo-600">Câu 1 / 50</div>
+                <div id="score" class="text-amber-600">Điểm: 0</div>
+            </div>
+
+            <div class="w-full bg-slate-200 rounded-full h-2 mb-6">
+                <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full" style="width: 2%"></div>
+            </div>
+
+            <p id="question" class="text-lg font-semibold mb-6 min-h-[56px]"></p>
+            
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Các lựa chọn sẽ được thêm vào đây bằng JavaScript -->
+            </div>
+
+            <div id="explanation-container" class="explanation mt-5 p-4 bg-slate-50 border-l-4 border-sky-500 rounded-r-lg">
+                <h3 class="font-bold text-sky-700 mb-1">Lời giải chi tiết:</h3>
+                <p id="explanation-text" class="text-slate-600"></p>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button id="next-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition duration-300 hidden">Câu tiếp theo</button>
+            </div>
+        </div>
+
+        <div id="result-container" class="hidden text-center">
+            <h2 class="text-3xl font-bold text-slate-700 mb-4">Hoàn thành!</h2>
+            <p class="text-xl mb-6">Điểm số của bạn là: <span id="final-score" class="font-bold text-indigo-600"></span></p>
+            <p id="result-message" class="text-slate-600 mb-8"></p>
+            <button id="restart-btn" class="bg-amber-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-300 transition duration-300">Làm lại bài</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "This machine _______ twice a year.",
+                options: ["is serviced", "is servicing", "services", "serviced"],
+                answer: 0,
+                explanation: "Đây là câu bị động ở thì hiện tại đơn, diễn tả một hành động lặp đi lặp lại. Cấu trúc: S + am/is/are + V3/ed. 'This machine' là vật nên phải dùng bị động."
+            },
+            {
+                question: "The new bridge _______ by the end of next month.",
+                options: ["is completed", "will be completed", "has been completed", "was completed"],
+                answer: 1,
+                explanation: "Dấu hiệu 'by the end of next month' cho thấy đây là thì tương lai. Câu bị động thì tương lai đơn có cấu trúc: S + will be + V3/ed."
+            },
+            {
+                question: "My wallet _______ from my bag yesterday.",
+                options: ["stole", "is stolen", "was stolen", "has stolen"],
+                answer: 2,
+                explanation: "'Yesterday' là dấu hiệu của thì quá khứ đơn. Câu bị động ở thì quá khứ đơn: S + was/were + V3/ed."
+            },
+            {
+                question: "English _______ all over the world.",
+                options: ["is spoken", "speaks", "is speaking", "spoke"],
+                answer: 0,
+                explanation: "Đây là một sự thật hiển nhiên, dùng thì hiện tại đơn. 'English' là đối tượng bị tác động nên ta dùng câu bị động. Cấu trúc: S + is + V3/ed."
+            },
+            {
+                question: "The problem _______ by the experts right now.",
+                options: ["is being discussed", "is discussed", "discusses", "has been discussed"],
+                answer: 0,
+                explanation: "'Right now' là dấu hiệu của thì hiện tại tiếp diễn. Cấu trúc câu bị động: S + am/is/are + being + V3/ed."
+            },
+            {
+                question: "These exercises must _______ carefully.",
+                options: ["be done", "do", "to do", "been done"],
+                answer: 0,
+                explanation: "Sau động từ khuyết thiếu (modal verb) như 'must', câu bị động có dạng: modal verb + be + V3/ed."
+            },
+            {
+                question: "The final decision _______ yet.",
+                options: ["hasn't been made", "wasn't made", "isn't made", "doesn't make"],
+                answer: 0,
+                explanation: "'Yet' là dấu hiệu của thì hiện tại hoàn thành. Câu bị động có cấu trúc: S + has/have + not + been + V3/ed."
+            },
+            {
+                question: "The novel 'Harry Potter' _______ by J.K. Rowling.",
+                options: ["was written", "wrote", "is written", "writes"],
+                answer: 0,
+                explanation: "Hành động viết tiểu thuyết này đã xảy ra và kết thúc trong quá khứ. Dùng câu bị động thì quá khứ đơn."
+            },
+            {
+                question: "How _______ cheese _______?",
+                options: ["is / made", "does / make", "is / make", "does / made"],
+                answer: 0,
+                explanation: "Đây là câu hỏi bị động ở thì hiện tại đơn, hỏi về quy trình làm phô mai. Cấu trúc câu hỏi Wh-: Wh-word + am/is/are + S + V3/ed?"
+            },
+            {
+                question: "The classroom _______ when I came.",
+                options: ["was being cleaned", "was cleaning", "cleaned", "is cleaned"],
+                answer: 0,
+                explanation: "Hành động 'dọn dẹp' đang diễn ra tại một thời điểm trong quá khứ ('when I came'). Dùng câu bị động thì quá khứ tiếp diễn: S + was/were + being + V3/ed."
+            },
+            {
+                question: "The suspect is believed _______ the country.",
+                options: ["to have left", "to leave", "leaving", "has left"],
+                answer: 0,
+                explanation: "Đây là dạng bị động đặc biệt với động từ tường thuật (reporting verbs). Hành động 'rời đi' xảy ra trước hành động 'tin rằng', nên dùng 'to have + V3/ed'."
+            },
+            {
+                question: "I remember _______ to the zoo when I was a child.",
+                options: ["being taken", "taking", "to be taken", "to take"],
+                answer: 0,
+                explanation: "Sau 'remember' + V-ing, chỉ một hành động đã xảy ra trong quá khứ. 'Tôi' là người 'được đưa đi', nên dùng dạng bị động của danh động từ: being + V3/ed."
+            },
+            {
+                question: "This building is going _______ next year.",
+                options: ["to be demolished", "to demolish", "demolishing", "demolished"],
+                answer: 0,
+                explanation: "Đây là câu bị động với cấu trúc 'be going to'. Cấu trúc bị động: S + am/is/are + going to be + V3/ed."
+            },
+            {
+                question: "All the lights should _______ off before you leave.",
+                options: ["be turned", "turn", "to be turned", "turning"],
+                answer: 0,
+                explanation: "Câu bị động với động từ khuyết thiếu 'should'. Cấu trúc: should + be + V3/ed."
+            },
+            {
+                question: "The old theater is said _______ haunted.",
+                options: ["to be", "being", "is", "be"],
+                answer: 0,
+                explanation: "Dạng bị động đặc biệt: S + be + said/thought/believed + to V. 'Nhà hát được cho là' - dùng 'to be'."
+            },
+            {
+                question: "This famous painting _______ for millions of dollars last month.",
+                options: ["was sold", "sold", "is sold", "has been sold"],
+                answer: 0,
+                explanation: "Dấu hiệu 'last month' chỉ thì quá khứ đơn. Dùng câu bị động vì 'bức tranh' không thể tự bán nó."
+            },
+            {
+                question: "The injured man couldn't walk and had to _______ home.",
+                options: ["be carried", "carry", "carried", "be carrying"],
+                answer: 0,
+                explanation: "Sau 'had to', động từ ở dạng nguyên mẫu. Vì người đàn ông 'phải được khiêng', ta dùng dạng bị động: be + V3/ed."
+            },
+            {
+                question: "Many trees _______ down to build that new road.",
+                options: ["were cut", "cut", "are cut", "have been cut"],
+                answer: 1,
+                explanation: "Hành động 'chặt cây' đã xảy ra trong quá khứ để 'xây dựng con đường đó'. Dùng bị động thì quá khứ đơn."
+            },
+            {
+                question: "The new software _______ on all computers tomorrow morning.",
+                options: ["will be installed", "will install", "is installed", "installs"],
+                answer: 0,
+                explanation: "'Tomorrow morning' là dấu hiệu thì tương lai đơn. Dùng câu bị động vì 'phần mềm' không thể tự cài đặt."
+            },
+            {
+                question: "He hates _______ what to do.",
+                options: ["being told", "telling", "to be told", "to tell"],
+                answer: 0,
+                explanation: "Sau 'hate' + V-ing. Anh ấy ghét 'bị bảo' phải làm gì. Dùng dạng bị động của danh động từ: being + V3/ed."
+            },
+            {
+                question: "The letters _______ by the secretary every day.",
+                options: ["are typed", "type", "is typed", "are typing"],
+                answer: 0,
+                explanation: "'Every day' chỉ thói quen, dùng thì hiện tại đơn. Dùng bị động vì 'lá thư' không thể tự đánh máy."
+            },
+            {
+                question: "This problem can _______ easily by following the instructions.",
+                options: ["be solved", "solve", "solving", "to be solved"],
+                answer: 0,
+                explanation: "Câu bị động với động từ khuyết thiếu 'can'. Cấu trúc: can + be + V3/ed."
+            },
+            {
+                question: "The cake _______ by my sister for my birthday party last night.",
+                options: ["was made", "made", "is made", "has been made"],
+                answer: 0,
+                explanation: "'Last night' là dấu hiệu của quá khứ đơn. Dùng bị động vì 'cái bánh' không thể tự làm ra nó."
+            },
+            {
+                question: "Your homework must _______ in by Friday.",
+                options: ["be handed", "hand", "to hand", "handed"],
+                answer: 0,
+                explanation: "Câu bị động với động từ khuyết thiếu 'must'. Cấu trúc: must + be + V3/ed."
+            },
+            {
+                question: "It is reported that two people _______ in the accident.",
+                options: ["were injured", "injured", "are injured", "have injured"],
+                answer: 0,
+                explanation: "Hành động 'bị thương' đã xảy ra trong quá khứ. Dùng bị động thì quá khứ đơn. Đây là cấu trúc bị động tường thuật."
+            },
+            {
+                question: "The children _______ home from school by their parents every afternoon.",
+                options: ["are picked up", "pick up", "is picked up", "are picking up"],
+                answer: 0,
+                explanation: "'Every afternoon' chỉ thói quen, dùng thì hiện tại đơn. Dùng bị động vì 'bọn trẻ' được bố mẹ đón về."
+            },
+            {
+                question: "A new hospital _______ in our city recently.",
+                options: ["has been built", "was built", "is built", "builds"],
+                answer: 0,
+                explanation: "'Recently' là dấu hiệu của thì hiện tại hoàn thành. Dùng bị động vì 'bệnh viện' không thể tự xây."
+            },
+            {
+                question: "The floor looks dirty. It needs _______.",
+                options: ["to be cleaned", "cleaning", "A & B are correct", "to clean"],
+                answer: 2,
+                explanation: "Sau 'need', ta có thể dùng 'to be + V3/ed' hoặc 'V-ing' để diễn tả ý bị động. Cả A và B đều đúng."
+            },
+            {
+                question: "She was made _______ the whole story.",
+                options: ["to tell", "tell", "telling", "told"],
+                answer: 0,
+                explanation: "Cấu trúc chủ động là 'make someone do something'. Khi chuyển sang bị động là 'someone is made TO DO something'. Vì vậy phải dùng 'to tell'."
+            },
+            {
+                question: "The environment will be seriously polluted if waste _______ into the river.",
+                options: ["is dumped", "dumps", "dumped", "will be dumped"],
+                answer: 0,
+                explanation: "Đây là câu điều kiện loại 1. Mệnh đề 'if' dùng thì hiện tại đơn. Dùng bị động vì 'rác thải' bị đổ xuống sông."
+            },
+            {
+                question: "I don't mind _______ for a few minutes.",
+                options: ["being kept waiting", "keeping waiting", "to be kept waiting", "to keep waiting"],
+                answer: 0,
+                explanation: "Sau 'mind' + V-ing. 'Tôi không phiền bị bắt chờ'. Cấu trúc bị động của danh động từ: being + V3/ed."
+            },
+            {
+                question: "The roof of the house _______ in the storm last week.",
+                options: ["was damaged", "damaged", "is damaged", "has been damaged"],
+                answer: 0,
+                explanation: "'Last week' là dấu hiệu của quá khứ đơn. Dùng bị động vì 'mái nhà' bị hư hại."
+            },
+            {
+                question: "Information _______ and stored on computers.",
+                options: ["can be processed", "can process", "processed", "processing"],
+                answer: 0,
+                explanation: "Câu bị động với động từ khuyết thiếu 'can'. 'Thông tin có thể được xử lý...'. Cấu trúc: can + be + V3/ed."
+            },
+            {
+                question: "When was the last time you _______ your hair cut?",
+                options: ["had", "have", "were", "did"],
+                answer: 0,
+                explanation: "Đây là cấu trúc bị động truyền khiến (causative form): have something done (nhờ ai đó làm gì cho mình). 'Cắt tóc' là hành động trong quá khứ nên dùng 'had'."
+            },
+            {
+                question: "The project has to _______ on time.",
+                options: ["be finished", "finish", "finishing", "finished"],
+                answer: 0,
+                explanation: "Sau 'has to', động từ ở dạng nguyên mẫu. Dùng bị động vì 'dự án' phải được hoàn thành. Cấu trúc: has to + be + V3/ed."
+            },
+            {
+                question: "This food _______ in the microwave.",
+                options: ["can be heated", "can heat", "is heated", "heats"],
+                answer: 0,
+                explanation: "Câu bị động với động từ khuyết thiếu 'can', chỉ khả năng. 'Thức ăn này có thể được hâm nóng...'"
+            },
+            {
+                question: "Thousands of new houses _______ every year.",
+                options: ["are built", "build", "is built", "are building"],
+                answer: 0,
+                explanation: "'Every year' là dấu hiệu của thì hiện tại đơn, diễn tả sự việc lặp lại. Dùng bị động vì 'nhà' không thể tự xây."
+            },
+            {
+                question: "The cause of the fire _______ yet.",
+                options: ["has not been discovered", "was not discovered", "is not discovered", "did not discover"],
+                answer: 0,
+                explanation: "'Yet' là dấu hiệu của thì hiện tại hoàn thành. Dùng bị động vì 'nguyên nhân' không thể tự khám phá ra."
+            },
+            {
+                question: "The thief got away and _______. ",
+                options: ["was never seen", "never saw", "is never seen", "has never seen"],
+                answer: 0,
+                explanation: "Hành động 'nhìn thấy' xảy ra trong quá khứ. 'Tên trộm không bao giờ được nhìn thấy nữa'. Dùng bị động thì quá khứ đơn."
+            },
+            {
+                question: "These photos _______ with a digital camera.",
+                options: ["were taken", "took", "are taken", "have been taken"],
+                answer: 0,
+                explanation: "Hành động 'chụp ảnh' đã xảy ra trong quá khứ. Dùng bị động thì quá khứ đơn vì 'những bức ảnh' không thể tự chụp."
+            },
+            {
+                question: "The meeting is expected _______ for another hour.",
+                options: ["to last", "lasting", "to be lasted", "lasted"],
+                answer: 0,
+                explanation: "Dạng bị động đặc biệt: S + be + expected + to V. 'To last' (kéo dài) là nội động từ, không có dạng bị động."
+            },
+            {
+                question: "She was seen _______ out of the house at midnight.",
+                options: ["to climb", "climbing", "climbed", "to be climbed"],
+                answer: 0,
+                explanation: "Cấu trúc chủ động: 'see someone do/doing something'. Khi chuyển sang bị động: 'someone is seen TO DO/DOING something'. 'to climb' nhấn mạnh toàn bộ hành động, 'climbing' nhấn mạnh hành động đang diễn ra. Cả hai đều có thể chấp nhận, nhưng 'to climb' phổ biến hơn trong văn viết."
+            },
+            {
+                question: "Nothing _______ about the problem for months.",
+                options: ["has been done", "was done", "is done", "did"],
+                answer: 0,
+                explanation: "'For months' là dấu hiệu của thì hiện tại hoàn thành, chỉ một khoảng thời gian kéo dài đến hiện tại. Dùng bị động."
+            },
+            {
+                question: "The plants _______ every two days or they will die.",
+                options: ["must be watered", "must water", "are watered", "watered"],
+                answer: 0,
+                explanation: "Câu bị động với động từ khuyết thiếu 'must' chỉ sự cần thiết, bắt buộc."
+            },
+            {
+                question: "The first smartphones _______ to the public in the early 2000s.",
+                options: ["were introduced", "introduced", "are introduced", "have been introduced"],
+                answer: 0,
+                explanation: "'in the early 2000s' là thời gian xác định trong quá khứ. Dùng bị động thì quá khứ đơn."
+            },
+            {
+                question: "The results of the competition _______ tomorrow.",
+                options: ["will be announced", "will announce", "are announced", "announce"],
+                answer: 0,
+                explanation: "'Tomorrow' là dấu hiệu của thì tương lai đơn. Dùng bị động vì 'kết quả' không thể tự thông báo."
+            },
+            {
+                question: "He was given a new bike for his birthday. -> A new bike _______ to him for his birthday.",
+                options: ["was given", "gave", "is given", "gives"],
+                answer: 0,
+                explanation: "Đây là câu bị động với 2 tân ngữ. 'He was given a new bike' (anh ấy được tặng) tương đương với 'A new bike was given to him' (một chiếc xe đạp được tặng cho anh ấy)."
+            },
+            {
+                question: "It is said that this herb can cure many diseases. -> This herb _______ to cure many diseases.",
+                options: ["is said", "says", "was said", "said"],
+                answer: 0,
+                explanation: "Đây là cách chuyển đổi từ cấu trúc bị động tường thuật 'It is said that...' sang 'S + be said + to V'."
+            },
+            {
+                question: "This form must be signed _______ the applicant.",
+                options: ["by", "with", "from", "on"],
+                answer: 0,
+                explanation: "Trong câu bị động, 'by' được dùng để chỉ tác nhân (người hoặc vật) thực hiện hành động."
+            },
+            {
+                question: "While the presentation _______, the fire alarm went off.",
+                options: ["was being given", "was giving", "gave", "had been given"],
+                answer: 0,
+                explanation: "Hành động 'thuyết trình' đang diễn ra thì hành động khác (chuông báo cháy) xen vào. Dùng bị động thì quá khứ tiếp diễn."
+            }
+        ];
+
+
+        const quizContainer = document.getElementById('quiz-container');
+        const quizContent = document.getElementById('quiz-content');
+        const resultContainer = document.getElementById('result-container');
+        const questionEl = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationContainer = document.getElementById('explanation-container');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const progressEl = document.getElementById('progress');
+        const scoreEl = document.getElementById('score');
+        const progressBarEl = document.getElementById('progress-bar');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultMessageEl = document.getElementById('result-message');
+        
+        let shuffledQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            shuffledQuestions = [...quizData].sort(() => Math.random() - 0.5);
+            currentQuestionIndex = 0;
+            score = 0;
+            quizContent.style.display = 'block';
+            resultContainer.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            scoreEl.textContent = `Điểm: 0`;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            resetState();
+            const currentQuestion = shuffledQuestions[currentQuestionIndex];
+            questionEl.textContent = currentQuestion.question;
+
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.innerHTML = `<span class="font-bold mr-2">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                button.classList.add('option-btn', 'w-full', 'p-4', 'border-2', 'border-slate-300', 'rounded-lg', 'text-left', 'hover:bg-slate-100', 'hover:border-indigo-400');
+                button.dataset.index = index;
+                button.addEventListener('click', selectAnswer);
+                optionsContainer.appendChild(button);
+            });
+            
+            updateProgress();
+        }
+
+        function resetState() {
+            explanationContainer.classList.remove('show');
+            nextBtn.classList.add('hidden');
+            while (optionsContainer.firstChild) {
+                optionsContainer.removeChild(optionsContainer.firstChild);
+            }
+        }
+        
+        function updateProgress() {
+            const questionNumber = currentQuestionIndex + 1;
+            progressEl.textContent = `Câu ${questionNumber} / ${shuffledQuestions.length}`;
+            progressBarEl.style.width = `${(questionNumber / shuffledQuestions.length) * 100}%`;
+        }
+
+        function selectAnswer(e) {
+            const selectedBtn = e.currentTarget;
+            const selectedIndex = parseInt(selectedBtn.dataset.index);
+            const correctIndex = shuffledQuestions[currentQuestionIndex].answer;
+
+            Array.from(optionsContainer.children).forEach(button => {
+                button.disabled = true; // Disable all options
+                 const buttonIndex = parseInt(button.dataset.index);
+                if (buttonIndex === correctIndex) {
+                    button.classList.add('correct');
+                } else {
+                    button.classList.remove('hover:bg-slate-100', 'hover:border-indigo-400');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                scoreEl.textContent = `Điểm: ${score}`;
+            } else {
+                selectedBtn.classList.add('incorrect');
+            }
+
+            showExplanation();
+            
+            if (shuffledQuestions.length > currentQuestionIndex + 1) {
+                nextBtn.classList.remove('hidden');
+            } else {
+                setTimeout(showResult, 1500);
+            }
+        }
+        
+        function showExplanation() {
+            const explanation = shuffledQuestions[currentQuestionIndex].explanation;
+            explanationTextEl.textContent = explanation;
+            explanationContainer.classList.add('show');
+        }
+
+        function showResult() {
+            quizContent.style.display = 'none';
+            resultContainer.classList.remove('hidden');
+            finalScoreEl.textContent = `${score} / ${shuffledQuestions.length}`;
+            
+            let message = '';
+            const percentage = (score / shuffledQuestions.length) * 100;
+            if (percentage >= 90) {
+                message = "Xuất sắc! Bạn đã nắm rất vững kiến thức về câu bị động.";
+            } else if (percentage >= 70) {
+                message = "Rất tốt! Bạn hiểu khá rõ về câu bị động, hãy cố gắng thêm nhé.";
+            } else if (percentage >= 50) {
+                message = "Khá ổn! Bạn cần ôn tập thêm một chút để nắm chắc hơn.";
+            } else {
+                message = "Đừng nản lòng! Hãy xem lại lời giải và thử lại lần nữa nhé.";
+            }
+            resultMessageEl.textContent = message;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            showQuestion();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            // Simply reload the page to get a new shuffled quiz
+            location.reload();
+        });
+
+        // Bắt đầu bài kiểm tra khi trang được tải
+        startQuiz();
+    </script>
+</body>
+</html>
